@@ -1,0 +1,12 @@
+test_budget_cap (test_pipeline.BoundaryTests.test_budget_cap) ... ok
+test_cost_not_zero (test_pipeline.BoundaryTests.test_cost_not_zero) ... ok
+test_duplicate_vectors_stay_together (test_pipeline.BoundaryTests.test_duplicate_vectors_stay_together) ... ok
+test_semantics (test_pipeline.BoundaryTests.test_semantics) ... ok
+test_top_selection (test_pipeline.BoundaryTests.test_top_selection) ... ok
+test_unprofitable_contacts (test_pipeline.BoundaryTests.test_unprofitable_contacts) ... ok
+test_zero_budget (test_pipeline.BoundaryTests.test_zero_budget) ... ok
+
+----------------------------------------------------------------------
+Ran 7 tests in 0.006s
+
+OK

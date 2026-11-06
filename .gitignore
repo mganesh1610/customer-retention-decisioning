@@ -1,0 +1,6 @@
+data/
+results/*.sqlite
+results/holdout_scores.csv
+__pycache__/
+*.pyc
+.venv/

@@ -1,0 +1,109 @@
+{
+  "source": {
+    "url": "https://archive.ics.uci.edu/static/public/563/iranian%2Bchurn%2Bdataset.zip",
+    "sha256": "696c3a1812267980751f30d19193a1b430ac4ad76172bb089e664c96813ead66",
+    "rows": 3150,
+    "churn_labels": 495,
+    "modeled_features": [
+      "call_failure",
+      "complains",
+      "subscription_length",
+      "charge_amount",
+      "seconds_of_use",
+      "frequency_of_use",
+      "frequency_of_sms",
+      "distinct_called_numbers",
+      "tariff_plan"
+    ],
+    "excluded": [
+      "status",
+      "customer_value",
+      "age",
+      "age_group"
+    ]
+  },
+  "splits": {
+    "train": 1886,
+    "validation": 632,
+    "test": 632,
+    "feature_groups": 2785,
+    "test_feature_groups": 557,
+    "policy": "identical modeled vectors grouped; no calendar timestamps or true person IDs supplied"
+  },
+  "model_selection": [
+    {
+      "model": "logistic_regression",
+      "validation_average_precision": 0.7483287615282542,
+      "validation_brier": 0.062132745828526084
+    },
+    {
+      "model": "random_forest",
+      "validation_average_precision": 0.8844063867915732,
+      "validation_brier": 0.040241962276863406
+    },
+    {
+      "model": "hist_gradient_boosting",
+      "validation_average_precision": 0.9010044643096065,
+      "validation_brier": 0.035938233152985735
+    }
+  ],
+  "selected_model": "hist_gradient_boosting",
+  "holdout": {
+    "roc_auc": 0.9775909850055976,
+    "roc_auc_group_bootstrap_95_ci": [
+      0.9591052334737845,
+      0.9893486051332082
+    ],
+    "average_precision": 0.9051622242924307,
+    "brier_score": 0.04097909414914483,
+    "prior_brier_score": 0.136414047561197,
+    "prevalence": 0.1629746835443038,
+    "top_20_percent": {
+      "selected": 127,
+      "positive_labels": 95,
+      "precision": 0.7480314960629921,
+      "recall": 0.9223300970873787,
+      "lift_vs_random": 4.589863160308845
+    }
+  },
+  "retention_budget_scenario": {
+    "assumptions": {
+      "budget": 1000.0,
+      "contact_cost": 2.0,
+      "rescue_probability_if_would_churn": 0.1,
+      "margin_per_saved_customer": 100.0,
+      "units": "illustrative monetary units, not source Charge Amount",
+      "interpretation": "external assumptions only; not measured retention uplift, ROI or Cost of Retention"
+    },
+    "result": {
+      "selected": 134,
+      "contact_spend": 268.0,
+      "expected_net_scenario_units": 650.3891700378822,
+      "expected_saved_scenario": 9.18389170037882,
+      "observed_retention_effect": null
+    }
+  },
+  "semantic_validation": {
+    "files_parsed": 2,
+    "dimensions": 6,
+    "measures": 4,
+    "hosted_looker_validation": false
+  },
+  "checks": {
+    "source_rows": true,
+    "source_churn_count": true,
+    "split_row_conservation": true,
+    "modeled_feature_groups_disjoint": true,
+    "excluded_features_absent": true,
+    "finite_probabilities": true,
+    "probabilities_in_range": true,
+    "cohort_count_reconciles": true,
+    "cohort_churn_reconciles": true,
+    "sqlite_integrity": true,
+    "positive_classes_in_each_split": true,
+    "semantic_and_sql_syntax": true
+  },
+  "passed": 12,
+  "failed": 0,
+  "execution": "local Python and SQLite; LookML and BigQuery SQL syntax checks; no hosted Looker or Vertex AI run"
+}

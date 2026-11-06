@@ -1,0 +1,8 @@
+{
+  "budget": 1000.0,
+  "contact_cost": 2.0,
+  "rescue_probability_if_would_churn": 0.1,
+  "margin_per_saved_customer": 100.0,
+  "units": "illustrative monetary units, not source Charge Amount",
+  "interpretation": "external assumptions only; not measured retention uplift, ROI or Cost of Retention"
+}

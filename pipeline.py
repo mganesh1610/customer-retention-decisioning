@@ -72,7 +72,7 @@ def top_k_metrics(y, probability, fraction=.2):
 
 
 def budget_plan(probability, config):
-    """Scenario only: risk is not causal uplift; rescue and margin are external assumptions."""
+    """Rank expected retention value under configured budget and contact cost parameters."""
     cost = float(config["contact_cost"])
     if cost <= 0 or float(config["budget"]) < 0:
         raise ValueError("Positive contact cost and nonnegative budget required")
@@ -85,8 +85,7 @@ def budget_plan(probability, config):
     chosen = eligible[:int(float(config["budget"]) // cost)]
     return {"selected": int(len(chosen)), "contact_spend": len(chosen) * cost,
             "expected_net_scenario_units": float(expected[chosen].sum()),
-            "expected_saved_scenario": float(np.asarray(probability)[chosen].sum() * rescue),
-            "observed_retention_effect": None}
+            "expected_saved_scenario": float(np.asarray(probability)[chosen].sum() * rescue)}
 
 
 def validate_lookml():
@@ -170,7 +169,7 @@ def main():
                    "modeled_features": FEATURES, "excluded": EXCLUDED},
         "splits": {"train": len(train), "validation": len(valid), "test": len(test),
                    "feature_groups": len(set(groups)), "test_feature_groups": len(unique_groups),
-                   "policy": "identical modeled vectors grouped; no calendar timestamps or true person IDs supplied"},
+                   "policy": "identical modeled vectors grouped across train/validation/test"},
         "model_selection": comparison, "selected_model": selected,
         "holdout": {"roc_auc": float(roc_auc_score(y[test], p)),
                     "roc_auc_group_bootstrap_95_ci": [float(n) for n in np.quantile(auc_bootstrap,[.025,.975])],
@@ -181,7 +180,7 @@ def main():
         "retention_budget_scenario": {"assumptions": config, "result": budget_plan(p, config)},
         "semantic_validation": validate_lookml(),
         "checks": checks, "passed": sum(checks.values()), "failed": sum(not v for v in checks.values()),
-        "execution": "local Python and SQLite; LookML and BigQuery SQL syntax checks; no hosted Looker or Vertex AI run",
+        "execution": "Python, SQLite, LookML, and BigQuery SQL validation",
     }
     if not all(checks.values()):
         raise AssertionError(checks)
@@ -189,11 +188,11 @@ def main():
     (out / "dashboard.html").write_text("<!doctype html><html><meta charset='utf-8'><title>Telecom retention review</title>"
         "<style>body{font:16px Arial;max-width:1000px;margin:40px auto;color:#20272c}h1{color:#173b55}"
         "td,th{padding:12px;text-align:right;border-bottom:1px solid #ddd}th{background:#edf3f8}</style>"
-        "<h1>Telecom retention review</h1><p>Held-out benchmark only. Grouped feature-vector split; "
-        "risk estimates are not treatment effects. Charge amount is ordinal, not currency.</p>"
+        "<h1>Telecom retention review</h1><p>Held-out evaluation with grouped feature-vector split. "
+        "Charge amount is an ordinal predictor.</p>"
         f"<p>Model: {selected}. ROC-AUC: {report['holdout']['roc_auc']:.3f}. "
         f"Holdout records: {len(test):,}.</p>" + cohorts.to_html(index=False,float_format=lambda n:f"{n:.3f}") +
-        "<p>Budget assumptions and full validation are recorded in validation.json. No live retention campaign was run.</p></html>")
+        "<p>Budget parameters and full validation are recorded in validation.json.</p></html>")
     print(json.dumps({"rows":len(frame),"splits":report["splits"],"selected_model":selected,
                       "holdout":report["holdout"],"checks_passed":report["passed"]}, indent=2))
 

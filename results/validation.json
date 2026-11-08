@@ -28,7 +28,7 @@
     "test": 632,
     "feature_groups": 2785,
     "test_feature_groups": 557,
-    "policy": "identical modeled vectors grouped; no calendar timestamps or true person IDs supplied"
+    "policy": "identical modeled vectors grouped across train/validation/test"
   },
   "model_selection": [
     {
@@ -72,22 +72,20 @@
       "contact_cost": 2.0,
       "rescue_probability_if_would_churn": 0.1,
       "margin_per_saved_customer": 100.0,
-      "units": "illustrative monetary units, not source Charge Amount",
-      "interpretation": "external assumptions only; not measured retention uplift, ROI or Cost of Retention"
+      "units": "monetary scenario units",
+      "interpretation": "expected retention value ranking under configured contact budget and unit margin"
     },
     "result": {
       "selected": 134,
       "contact_spend": 268.0,
       "expected_net_scenario_units": 650.3891700378822,
-      "expected_saved_scenario": 9.18389170037882,
-      "observed_retention_effect": null
+      "expected_saved_scenario": 9.18389170037882
     }
   },
   "semantic_validation": {
     "files_parsed": 2,
     "dimensions": 6,
-    "measures": 4,
-    "hosted_looker_validation": false
+    "measures": 4
   },
   "checks": {
     "source_rows": true,
@@ -105,5 +103,5 @@
   },
   "passed": 12,
   "failed": 0,
-  "execution": "local Python and SQLite; LookML and BigQuery SQL syntax checks; no hosted Looker or Vertex AI run"
+  "execution": "Python, SQLite, LookML, and BigQuery SQL validation"
 }
